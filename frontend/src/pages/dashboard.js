@@ -1,40 +1,26 @@
 // src/pages/dashboard.js
 import { useState } from 'react';
 import { getYoutubeGlobal } from '../api/music.api';
+import { getToken } from '../utils/auth'; // Ambil token login
 
 export default function Dashboard() {
-  const [apiKey, setApiKey] = useState('');
-  const [country, setCountry] = useState('ID'); // Default Indonesia
-  const [timeframe, setTimeframe] = useState('day');
   const [data, setData] = useState(null);
 
-  const handleSearch = async () => {
+  const loadData = async () => {
     try {
-      // getYoutubeGlobal sekarang menerima parameter pencarian
-      const res = await getYoutubeGlobal(country, timeframe, apiKey);
+      const token = getToken(); // Token otomatis dari hasil login
+      const res = await getYoutubeGlobal('ID', 'day', token); 
       setData(res);
     } catch {
-      alert('Pencarian gagal: API Key salah atau limit habis');
+      alert('Gagal memuat data. Pastikan Anda sudah login.');
     }
   };
 
   return (
     <div>
-      <h2>Pencarian Musik Global (Client)</h2>
-      <input placeholder="API Key" onChange={e => setApiKey(e.target.value)} />
-      <input placeholder="Kode Negara (contoh: ID, US)" onChange={e => setCountry(e.target.value)} />
-      <select onChange={e => setTimeframe(e.target.value)}>
-        <option value="day">Harian</option>
-        <option value="week">Mingguan</option>
-      </select>
-      <button onClick={handleSearch}>Cari Data</button>
-
-      {data && (
-        <div style={{ marginTop: '20px' }}>
-          <h3>Hasil Pencarian:</h3>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      )}
+      <h2>User Dashboard</h2>
+      <button onClick={loadData}>Cari Musik Terpopuler</button>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }
