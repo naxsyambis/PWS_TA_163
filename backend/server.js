@@ -1,2 +1,8 @@
 const app = require('./src/app');
-app.listen(3000, () => console.log('Backend running on 3000'));
+
+// Mengambil PORT dari file .env atau menggunakan 3000 sebagai default
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

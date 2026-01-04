@@ -1,17 +1,18 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React from 'react';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 import Admin from './pages/admin';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="App">
+      <h1>Music Search App</h1>
+      <Login />
+      <hr />
+      <Dashboard />
+      <hr />
+      <Admin />
+    </div>
   );
 }
 

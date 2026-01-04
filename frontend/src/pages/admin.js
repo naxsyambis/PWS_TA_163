@@ -1,6 +1,5 @@
-// src/pages/admin.js
 import { useEffect, useState } from 'react';
-import { getUsers, deleteUser, generateApiKey } from '../api/admin.api';
+import { getUsers, deleteUser } from '../api/admin.api';
 import { getToken } from '../utils/auth';
 
 export default function Admin() {
@@ -8,43 +7,56 @@ export default function Admin() {
   const token = getToken();
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    if (token) {
+      loadUsers();
+    }
+  }, [token]);
 
   const loadUsers = async () => {
-    const data = await getUsers(token);
-    setUsers(data);
+    try {
+      const data = await getUsers(token);
+      setUsers(data);
+    } catch (err) {
+      alert('Gagal mengambil daftar user');
+    }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Hapus user ini?')) {
-      await deleteUser(id, token);
-      loadUsers(); // Refresh list
+    if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+      try {
+        await deleteUser(id, token);
+        alert('User berhasil dihapus');
+        loadUsers(); // Refresh daftar setelah menghapus
+      } catch (err) {
+        alert('Gagal menghapus user');
+      }
     }
   };
 
   return (
     <div>
       <h2>Admin Panel - Kelola Client</h2>
-      <table border="1">
+      <table border="1" cellPadding="10">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Nama</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {users.map(u => (
-            <tr key={u.id}>
-              <td>{u.name}</td>
-              <td>{u.email}</td>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.role}</td>
               <td>
-                <button onClick={() => handleDelete(u.id)}>Hapus</button>
-                <button onClick={async () => {
-                  const res = await generateApiKey(u.id, token);
-                  alert('Key baru: ' + res.apiKey);
-                }}>Buat API Key</button>
+                <button onClick={() => handleDelete(user.id)} style={{ color: 'red' }}>
+                  Hapus Client
+                </button>
               </td>
             </tr>
           ))}

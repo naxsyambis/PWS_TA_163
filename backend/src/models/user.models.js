@@ -1,7 +1,5 @@
-// src/models/user.models.js
-const db = require('./db'); // Menggunakan koneksi yang sudah ada
+const db = require('./db');
 
-// Fungsi yang sudah Anda miliki:
 exports.createUser = async (name, email, password) => {
   const [result] = await db.query(
     'INSERT INTO users (name,email,password,role) VALUES (?,?,?,?)',
@@ -11,10 +9,7 @@ exports.createUser = async (name, email, password) => {
 };
 
 exports.findByEmail = async (email) => {
-  const [rows] = await db.query(
-    'SELECT * FROM users WHERE email = ?',
-    [email]
-  );
+  const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
   return rows[0];
 };
 
@@ -23,19 +18,8 @@ exports.getAllUsers = async () => {
   return rows;
 };
 
-// --- TAMBAHKAN KODE DI BAWAH INI ---
-
-// Fungsi untuk menghapus user (Admin CRUD)
+// TAMBAHKAN INI: Fungsi untuk menghapus user dari tabel users
 exports.deleteUser = async (id) => {
   const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
-  return result;
-};
-
-// Fungsi untuk memperbarui data user (Admin CRUD)
-exports.updateUser = async (id, name, email, role) => {
-  const [result] = await db.query(
-    'UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?',
-    [name, email, role, id]
-  );
   return result;
 };
