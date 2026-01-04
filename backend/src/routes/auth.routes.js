@@ -1,13 +1,10 @@
 const router = require('express').Router();
-const apiKey = require('../middlewares/apiKey.middleware');
-const rateLimit = require('../middlewares/rateLimit');
-const music = require('../controllers/music.controller');
+const auth = require('../controllers/auth.controller');
 
-router.get(
-  '/youtube/global/:country/:timeframe',
-  apiKey,
-  rateLimit,
-  music.youtubeGlobal
-);
+// Rute untuk pendaftaran user baru
+router.post('/register', auth.register);
+
+// Rute untuk login
+router.post('/login', auth.login);
 
 module.exports = router;
