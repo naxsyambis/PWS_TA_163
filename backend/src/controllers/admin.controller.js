@@ -1,13 +1,13 @@
-const { getAllUsers } = require('../models/user.models');
-const crypto = require('crypto');
-const { createApiKey } = require('../models/apiKey.model');
+const db = require('../models/db');
 
-exports.users = async (req, res) => {
-  res.json(await getAllUsers());
+exports.users = async (req,res)=>{
+  if(req.user.role!=='admin') return res.sendStatus(403);
+  const [rows] = await db.query('SELECT id,name,email FROM users WHERE role="client"');
+  res.json(rows);
 };
 
-exports.generateApiKey = async (req, res) => {
-  const apiKey = 'pk_' + crypto.randomBytes(16).toString('hex');
-  await createApiKey(req.params.userId, apiKey);
-  res.json({ apiKey });
+exports.deleteUser = async (req,res)=>{
+  if(req.user.role!=='admin') return res.sendStatus(403);
+  await db.query('DELETE FROM users WHERE id=?',[req.params.id]);
+  res.json({message:'deleted'});
 };

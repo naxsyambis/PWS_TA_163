@@ -1,0 +1,11 @@
+import axios from 'axios';
+
+const BASE_URL = 'http://localhost:3000';
+
+export const searchMusic = (query, token) => {
+  return axios.get(`${BASE_URL}/music/search?q=${query}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};

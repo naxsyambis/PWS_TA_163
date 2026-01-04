@@ -1,15 +1,14 @@
 const axios = require('axios');
 
-exports.getYoutubeGlobal = async (country, timeframe) => {
-  const response = await axios.get(
-    `https://${process.env.RAPIDAPI_HOST}/youtube/global/${country}/${timeframe}`,
+exports.searchMusic = async (q)=>{
+  const res = await axios.get(
+    `https://musicdata-api.p.rapidapi.com/search?q=${q}`,
     {
-      headers: {
+      headers:{
         'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-        'x-rapidapi-host': process.env.RAPIDAPI_HOST
+        'x-rapidapi-host':'musicdata-api.p.rapidapi.com'
       }
     }
   );
-
-  return response.data;
+  return res.data;
 };

@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const auth = require('../middlewares/auth.jwt');
+const auth = require('../middleware/auth.jwt');
 const admin = require('../controllers/admin.controller');
 
 router.get('/users', auth, admin.users);
-router.post('/apikey/:userId', auth, admin.generateApiKey);
+router.delete('/users/:id', auth, admin.deleteUser);
 
 module.exports = router;
