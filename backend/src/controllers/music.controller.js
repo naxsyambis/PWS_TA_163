@@ -1,12 +1,12 @@
 const rapidapi = require('../services/rapidapi.service');
 
-exports.youtubeGlobal = async (req, res) => {
+exports.getMusicData = async (req, res) => {
   try {
-    // Parameter diambil dari URL params
-    const { country, timeframe } = req.params;
-    const data = await rapidapi.getYoutubeGlobal(country, timeframe);
+    const { category, action } = req.params;
+    // req.query akan menampung 'q', 'spotify_track_id', 'isrc', dll
+    const data = await rapidapi.fetchFromRapidAPI(category, action, req.query);
     res.json(data);
   } catch (err) {
-    res.status(500).json({ message: 'Gagal mengambil data musik' });
+    res.status(500).json({ message: 'Gagal mengambil data dari Songstats API' });
   }
 };

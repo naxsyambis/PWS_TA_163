@@ -1,14 +1,23 @@
 const axios = require('axios');
 
-exports.searchMusic = async (q)=>{
-  const res = await axios.get(
-    `https://musicdata-api.p.rapidapi.com/search?q=${q}`,
-    {
-      headers:{
-        'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-        'x-rapidapi-host':'musicdata-api.p.rapidapi.com'
-      }
+exports.fetchFromRapidAPI = async (category, action, params = {}) => {
+  const options = {
+    method: 'GET',
+    // Menggunakan Base URL Songstats sesuai file YAML
+    url: `https://api.songstats.com/enterprise/v1/${category}/${action}`,
+    params: params,
+    headers: {
+      // Pastikan API Key ini benar di file .env Anda
+      'X-Songstats-Api-Key': process.env.RAPIDAPI_KEY, 
+      'Content-Type': 'application/json'
     }
-  );
-  return res.data;
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data;
+  } catch (error) {
+    console.error(`API Error (${category}/${action}):`, error.response?.data || error.message);
+    throw error;
+  }
 };
